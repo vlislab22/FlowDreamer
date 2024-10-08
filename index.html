@@ -1,0 +1,896 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>FlowDreamer</title>
+    <meta name="author" content="Lutao Jiang and Addison Lin Wang">
+    <meta name="description" content="Project page of UniBind">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="eccv_logo.png">
+    <!-- Format -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="../format/app.css">
+    <link rel="stylesheet" href="../format/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+    <script src="../format/app.js"></script>
+
+  </head>
+
+  <body style=“text-align: center;”>
+    <div class="container" id="main">
+        <div class="row">
+            <h1 class="col-md-12 text-center">
+                FLOWDREAMER: EXPLORING HIGH FIDELITY TEXT- TO-3D GENERATION VIA RECTIFIED FLOW<br /> 
+                <small>
+                    arxiv 2024
+                </small>
+            </h1>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="list-inline" style="display: flex; justify-content: center; list-style-type: none; padding: 0; margin: 0 auto; max-width: 600px;">
+                    <li style="flex: 1; text-align: center; padding: 10px; box-sizing: border-box;">
+                        <img src="./images/hangyu.png" height="100px"><br>
+                        <a href="https://github.com/cyjdlhy">
+                           Hangyu Li
+                        </a>
+                        <br /> AI Thrust, HKUST(GZ)
+                    </li>
+                    <li style="flex: 1; text-align: center; padding: 10px; box-sizing: border-box;">
+                        <img src="./images/xiangxiang.png" height="100px"><br>
+                        <a href="https://cxxgtxy.github.io/">
+                           Xiangxiang Chu
+                        </a>
+                        <br /> Alibaba Group
+                    </li>
+                    <li style="flex: 1; text-align: center; padding: 10px; box-sizing: border-box;">
+                        <img src="./images/dingyuan.jpg" height="100px"><br>
+                        <a href="https://dingyuan-shi.github.io/">
+                           Dingyuan Shi
+                        </a>
+                        <br /> Alibaba Group
+                    </li>
+                    <li style="flex: 1; text-align: center; padding: 10px; box-sizing: border-box;">
+                        <img src="./images/Addision.png" height="100px"><br>
+                        <a href="https://vlislab22.github.io/vlislab/linwang.html">
+                           Addison Lin Wang
+                        </a>
+                        <br /> AI & CMA Thrust, HKUST(GZ) 
+                        <br/> Dept. of CSE, HKUST 
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
+        <!-- ##### Elements #####-->
+        <div class="row">
+                <div class="col-md-8 col-md-offset-2 text-center">
+                    <ul class="nav nav-pills nav-justified">
+                        <li>
+			                <a href="https://arxiv.org/abs/2408.05008v2">
+                            <img src="./images/arxiv.png" height="100px"><br>
+                                <h4><strong>Paper</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/cyjdlhy">
+                            <img src="./images/github_icon.jpg" height="100px"><br>
+                                <h4><strong>Code (Coming soon)</strong></h4>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="https://vlislab22.github.io/vlislab/">
+                            <img src="./images/lab_logo.png" height="100px"><br>
+                                <h4><strong>Vlislab</strong></h4>
+                            </a>
+                        </li>                       
+                      
+                    </ul>
+                </div>
+        </div>
+
+        <!-- ##### Presentation #####-->
+        <style>
+            .container_presentation {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: left;
+                width: 100%;
+            }
+        </style>
+
+        <!-- <br><br><br><br><br>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="container_presentation">
+                    <video controls style="object-fit: fill; width: 100%">
+                        <source src="./videos/video presentaion MM.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+        <br><br><br><br><br> -->
+
+        <!-- ##### Abstract #####-->
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h2 align="center">
+                    <strong>Abstract</strong>
+                </h2>
+                <p class="text-justify">
+                    Recent advances in text-to-3D generation have made significant progress. In
+                    particular, with the pretrained diffusion models, existing methods predominantly
+                    use Score Distillation Sampling (SDS) to train 3D models such as Neural Ra-
+                    Recent advances in text-to-3D generation have made significant progress. In par-
+                    ticular, with the pretrained diffusion models, existing methods predominantly use
+                    Score Distillation Sampling (SDS) to train 3D models such as Neural Radiance
+                    Fields (NeRF) and 3D Gaussian Splatting (3D GS). However, a hurdle is that they
+                    often encounter difficulties with over-smoothing textures and over-saturating col-
+                    ors. The rectified flow model – which utilizes a simple ordinary differential equa-
+                    tion (ODE) to represent a straight trajectory – shows promise as an alternative
+                    prior to text-to-3D generation. It learns a time-independent vector field, thereby
+                    reducing the ambiguity in 3D model update gradients that are calculated using
+                    time-dependent scores in the SDS framework. In light of this, we first develop
+                    a mathematical analysis to seamlessly integrate SDS with rectified flow model,
+                    paving the way for our initial framework known as Vector Field Distillation Sam-
+                    pling (VFDS). However, empirical findings indicate that VFDS still results in
+                    over-smoothing outcomes. Therefore, we analyze the grounding reasons for such
+                    a failure from the perspective of ODE trajectories. On top, we propose a novel
+                    framework, named FlowDreamer, which yields high-fidelity results with richer
+                    textual details and faster convergence. The key insight is to leverage the coupling
+                    and reversible properties of the rectified flow model to search for the correspond-
+                    ing noise, rather than using randomly sampled noise as in VFDS. Accordingly,
+                    we introduce a novel Unique Couple Matching (UCM) loss, which guides the 3D
+                    model to optimize along the same trajectory. Our FlowDreamer is superior in its
+                    flexibility to be applied to both NeRF and 3D GS. Extensive experiments demon-
+                    strate the high-fidelity outcomes and accelerated convergence of FlowDreamer.
+                    Moreover, we highlight the intriguing open questions, such as initialization chal-
+                    lenges in NeRF and sampling techniques, to benefit the research community.
+                </p>
+            </div>
+        </div>
+        <br><br><br><br><br>
+
+
+        <!-- 3D GS comparsions -->
+        <div class="col-md-8 col-md-offset-2"></div>
+            <h2 align="center">
+                <strong>3D GS results comparisons</strong>
+            </h2>
+            
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3>DreamGaussian</h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/dreamgaussian_1_reversed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A cyberpunk cyborg, white hair, head, photorealistic, 8K, HDR.</p> -->
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3>GaussianDreamer</h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/gs_1_left_reversed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A tank, highly detailed, photorealistic.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3>LucidDreamer</h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/lucid_1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A Beretta 92 pistol, highly detailed, photorealistic.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3><b>FlowDreamer(ours)</b></h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/pig.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A DSLR photo of a fashionable handbag with luxurious chain details.</p> -->
+                </div>
+            </div>
+        <!-- 这是居中显示的额外文本 -->
+        <div class="text-center" style="margin-top: 20px;">
+            <p><strong>an origami pig.</strong></p>
+        </div>
+
+            
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/dreamgaussian_2_reversed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A watch, highly detailed.</p> -->
+                </div>
+            </div>
+
+            
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/gs_2_left_reversed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>Jurassic Castle, highly detailed.mp4.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/lucid_2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A airplane, highly detailed.</p> -->
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/A pumpkin covered in cobwebs with plastic spiders crawling on it.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A burning car, highly detailed, photorealistic.</p> -->
+                </div>
+            </div>
+
+            <div class="text-center" style="margin-top: 20px;">
+                <p><strong>A pumpkin covered in cobwebs with plastic spiders crawling on it.</strong></p>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/dreamgaussian_3_reversed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/gs_3_left_reversed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/lucid_3.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/A watch, highly detailed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+            
+            <div class="text-center" style="margin-top: 20px;">
+                <p><strong>A watch, highly detailed.</strong></p>
+            </div>
+        </div>
+    
+
+        <!-- NeRF comparsions -->
+        <div class="col-md-8 col-md-offset-2">
+            <h2 align="center">
+                <strong>NeRF results comparisons</strong>
+            </h2>
+            
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3><b>DreamFusion</b></h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/dreamfusion_1_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A cyberpunk cyborg, white hair, head, photorealistic, 8K, HDR.</p> -->
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3><b>ProlificDreamer</b></h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/prolific_1_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A tank, highly detailed, photorealistic.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3><b>Consistent3D</b></h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/cons_1_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A Beretta 92 pistol, highly detailed, photorealistic.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <h3><b>FlowDreamer(ours)</b></h3>
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/it10000-test_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A DSLR photo of a fashionable handbag with luxurious chain details.</p> -->
+                </div>
+            </div>
+            
+            <!-- 这是居中显示的额外文本 -->
+            <div class="text-center" style="margin-top: 20px;">
+                <p><strong>A wide angle zoomed out DSLR photo of Tower Bridge made out of gingerbread and candy.</strong></p>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/dreamfusion_2_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A watch, highly detailed.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/prolific_2_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>Jurassic Castle, highly detailed.mp4.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/cons_2_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A airplane, highly detailed.</p> -->
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/out of it_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A burning car, highly detailed, photorealistic.</p> -->
+                </div>
+            </div>
+
+            <!-- 这是居中显示的额外文本 -->
+            <div class="text-center" style="margin-top: 20px;">
+                <p><strong>A DSLR photo of pyramid shaped burrito with a slice cut out of it.</strong></p>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/dreamfusion_3_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/prolific_3_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/cons_3_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-3">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/pot_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <p>A LEGO yachts made of colorful interlocking bricks.</p> -->
+                </div>
+            </div>
+
+            <!-- 这是居中显示的额外文本 -->
+            <div class="text-center" style="margin-top: 20px;">
+                <p><strong>A DSLR photo of a small saguaro cactus planted in a clay pot.</strong></p>
+            </div>
+
+        </div>
+    
+
+
+        <div class="col-md-8 col-md-offset-2">
+            <h2 align="center">
+                <strong>FlowDreamer of 3D GS results</strong>
+            </h2>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A cyberpunk cyborg, white hair, head, photorealistic, 8K, HDR.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A cyberpunk cyborg, white hair, head, photorealistic, 8K, HDR.</p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A tank, highly detailed, photorealistic.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A tank, highly detailed, photorealistic.</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A Beretta 92 pistol, highly detailed, photorealistic.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A Beretta 92 pistol, highly detailed, photorealistic.</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A DSLR photo of a fashionable handbag with luxurious chain details.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A DSLR photo of a fashionable handbag with luxurious chain details.</p>
+                </div>
+            </div>
+            
+            <!-- <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A watch, highly detailed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A watch, highly detailed.</p>
+                </div>
+            </div> -->
+
+            <!-- <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/Jurassic Castle, highly detailed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>Jurassic Castle, highly detailed.mp4.</p>
+                </div>
+            </div> -->
+
+            <!-- <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A airplane, highly detailed.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A airplane, highly detailed.</p>
+                </div>
+            </div> -->
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A burning car, highly detailed, photorealistic.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A burning car, highly detailed, photorealistic.</p>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A LEGO yachts made of colorful interlocking bricks.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A LEGO yachts made of colorful interlocking bricks.</p>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="col-md-8 col-md-offset-2">
+            <h2 align="center">
+                <strong>FlowDreamer of NeRF results</strong>
+            </h2>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/A_pink_ceramic_vase_filled_with_fresh_white_lilies_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A pink ceramic vase filled with fresh white lilies.</p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/A_highly-detailed_sandcastle_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A highly-detailed sandcastle.</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/A_vibrant_sunflower_with_green_leaves_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A vibrant sunflower with green leaves.</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/Sydney_opera_house,_aerial_view_left.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>Sydney opera house, aerial view</p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/a small cherry tomato.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>a small cherry tomato.</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="web_videos_3/A whimsical wind spinner.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p>A whimsical wind spinner.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- nfe -->
+        <div class="col-md-8 col-md-offset-2">
+            <h2 align="center" style="font-size: 1.6em;">
+                <strong>Impacts of different Number of Function Evaluations (NFE)</strong><br>
+                <strong>A LEGO car made of colorful interlocking bricks.</strong>
+            </h2>
+
+            <!-- <h2 align="center" style="font-size: 1.6em;"></h2>
+                <strong>A LEGO car made of colorful interlocking bricks.</strong>
+            </h2> -->
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A LEGO car made of colorful interlocking bricks_3.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">NFE 3 steps</p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A LEGO car made of colorful interlocking bricks_6.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">NFE 6 steps</p>
+                </div>
+            </div>
+            
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A LEGO car made of colorful interlocking bricks_12.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">NFE 12 steps</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A LEGO car made of colorful interlocking bricks_24.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">NFE 24 steps</p>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A LEGO car made of colorful interlocking bricks_48.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">NFE 48 steps</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/A LEGO car made of colorful interlocking bricks_96.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">NFE 96 steps</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- nfe -->
+        <div class="col-md-8 col-md-offset-2">
+            <h2 align="center" style="font-size: 1.6em;">
+                <strong>Impacts of different Classifier-Free Guidance (CFG) scales.</strong><br>
+                <strong>a cake filled with Oreos, highly detailed, photorealistic.</strong>
+            </h2>
+            
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_sds_10.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">VFDS(CFG 10)</p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_sds_40.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">VFDS(CFG 40)</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_sds_70.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">VFDS(CFG 70)</p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_sds_100.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">VFDS(CFG 100)</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_sds_200.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">VFDS(CFG 200)</p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-4">
+                <div class="video-item text-center">
+                    <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                        <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_sds_2000.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="font-size: 20px;">VFDS(CFG 2000)</p>
+                </div>
+            </div>
+            
+        </div>
+
+            <!-- 不同的cfg -->
+            <div class="col-md-8 col-md-offset-2">
+                <h2 align="center" style="font-size: 1.6em;">
+                    <strong>Impacts of different Classifier-Free Guidance (CFG) scales.</strong><br>
+                    <strong>a cake filled with Oreos, highly detailed, photorealistic.</strong>
+                </h2>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="video-item text-center">
+                        <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                            <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_10.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p style="font-size: 20px;">FlowDreamer(CFG 10)</p>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-4">
+                    <div class="video-item text-center">
+                        <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                            <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_40.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p style="font-size: 20px;">FlowDreamer(CFG 40)</p>
+                    </div>
+                </div>
+    
+                <div class="col-xs-12 col-sm-4">
+                    <div class="video-item text-center">
+                        <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                            <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_70.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p style="font-size: 20px;">FlowDreamer(CFG 70)</p>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-4">
+                    <div class="video-item text-center">
+                        <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                            <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_100.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p style="font-size: 20px;">FlowDreamer(CFG 100)</p>
+                    </div>
+                </div>
+    
+                <div class="col-xs-12 col-sm-4">
+                    <div class="video-item text-center">
+                        <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                            <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_200.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p style="font-size: 20px;">FlowDreamer(CFG 200)</p>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-4">
+                    <div class="video-item text-center">
+                        <video controls autoplay muted loop  style="width: 100%; height: auto;">
+                            <source src="./web_videos/a cake filled with Oreos, highly detailed, photorealistic_2000.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p style="font-size: 20px;">FlowDreamer(CFG 2000)</p>
+                    </div>
+                </div>
+    
+        </div>
+
+        <style>
+            .video-gallery {
+                margin-bottom: 20px;
+            }
+            .video-item {
+                margin-bottom: 15px;
+                max-width: 200px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .video-item video {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+            }
+            .video-item p {
+                font-size: 12px;
+                color: #333;
+                margin-top: 5px;
+                min-height: 60px;
+            }
+        </style>
+
+        <!-- ##### BibTex #####-->
+        <hr>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    BibTeX
+                </h3>
+
+                <div class="row align-items-center">
+                    <div class="col py-3">
+                        <pre>             
+                            @article{li2024dreamcouple,
+                                title={FlowDreamer: exploring high fidelity text-to-3D generation via rectified flow},
+                                author={Li, Hangyu and Chu, Xiangxiang and Shi, Dingyuan},
+                                journal={arXiv preprint arXiv:2408.05008v2},
+                                year={2024}
+                              }
+                        </pre>
+                    </div>
+                        
+
+                </div>
+                    
+            </div>
+        </div>
+    </div>
+</body>
+</html>
